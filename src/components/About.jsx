@@ -2,13 +2,22 @@ export default function About() {
   return (
     <section id="about" className="bg-gradient-to-b from-white to-cream max-w-7xl mx-auto px-6 py-16 md:py-24">
       <div className="grid md:grid-cols-2 gap-12 items-center">
-        <div className="hidden md:block h-full rounded-xl2 bg-gradient-to-br from-sage to-clay-light aspect-square" />
+        <div className="flex justify-center">
+          <img
+            src="/about-clinic.jpg"
+            alt="Sanjivani Clinic consultation room with natural herbal remedies"
+            className="w-full max-w-md aspect-square object-cover rounded-xl2 shadow-[0_12px_40px_rgba(28,74,54,0.16)] ring-1 ring-gold/30"
+          />
+        </div>
         <div>
           <p className="section-eyebrow mb-2">Meet Our Expert</p>
-          <h2 className="section-heading mb-2">About Dr. Jignesh Singada</h2>
-          <div className="section-underline mb-6" />
+          <h2 className="section-heading mb-2">About Dr. Jignesh B. Singada</h2>
+          <div className="section-underline mb-3" />
+          <p className="text-sm font-semibold tracking-wide text-gold-dark mb-6">
+            PGDEMS, CCH, CGO, CSVD · Homeopath &amp; Nutritionist · Godhra
+          </p>
           <p className="text-charcoal/70 mb-4 leading-relaxed">
-            Dr. Jignesh Singada is a highly knowledgeable and trustworthy homeopathic
+            Dr. Jignesh B. Singada is a highly knowledgeable and trustworthy homeopathic
             doctor practicing classical homeopathy in Godhra, Gujarat. Known for his
             attentive listening and patient-centric approach, he has earned the trust
             of patients seeking lasting, natural solutions for chronic and complex
@@ -21,13 +30,13 @@ export default function About() {
             and infertility — helping patients avoid surgery and reclaim their health
             through the gentle power of nature.
           </p>
-          <blockquote className="border-l-4 border-clay bg-gradient-to-r from-clay/5 to-transparent rounded-r-xl2 p-6 italic text-charcoal/80 hover:shadow-md transition-shadow">
+          <blockquote className="border-l-4 border-gold bg-leaf-light/50 rounded-r-xl2 p-6 italic text-charcoal/80 hover:shadow-md transition-shadow">
             &ldquo;Ignoring piles can silently affect your daily routine and quality of
             life. With timely homeopathic treatment, symptoms are managed at the root —
             no surgery, no side effects. At Sanjivani Clinic, lasting relief is
             possible.&rdquo;
-            <footer className="mt-4 not-italic text-sm text-clay-dark font-semibold">
-              — Dr. Jignesh Singada, on Piles Treatment
+            <footer className="mt-4 not-italic text-sm text-forest font-semibold">
+              — Dr. Jignesh B. Singada, on Piles Treatment
             </footer>
           </blockquote>
         </div>

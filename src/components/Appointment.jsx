@@ -35,24 +35,40 @@ export default function Appointment() {
             Tell us a little about your condition and preferred time — Dr. Singada&apos;s
             team will call you back to confirm your slot.
           </p>
+
+          <div className="mb-8 max-w-md rounded-xl2 border border-gold/40 bg-white px-5 py-4">
+            <p className="text-xs tracking-[0.2em] uppercase text-gold-dark font-semibold mb-1">
+              Consultation Charge
+            </p>
+            <p className="font-display text-3xl font-bold text-forest leading-tight">
+              ₹500<span className="text-lg font-semibold text-charcoal/50">/-</span>
+            </p>
+            <p className="text-sm text-charcoal/60 mt-1">Per consultation</p>
+          </div>
+
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-charcoal/70">
-              <span className="text-2xl">✓</span>
+              <span className="text-leaf">✓</span>
               <span>Quick confirmation via phone call</span>
             </div>
             <div className="flex items-center gap-3 text-charcoal/70">
-              <span className="text-2xl">✓</span>
+              <span className="text-leaf">✓</span>
               <span>Personalized consultation time</span>
             </div>
             <div className="flex items-center gap-3 text-charcoal/70">
-              <span className="text-2xl">✓</span>
+              <span className="text-leaf">✓</span>
               <span>Convenient appointment scheduling</span>
             </div>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="card space-y-4 order-1 md:order-2 hover:shadow-lg transition-shadow">
-          <h3 className="font-display font-bold text-charcoal mb-4">Your Details</h3>
+        <form onSubmit={handleSubmit} className="card space-y-4 order-1 md:order-2 card-lift">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <h3 className="font-display font-bold text-forest">Your Details</h3>
+            <p className="text-sm text-gold-dark font-semibold whitespace-nowrap">
+              Fee ₹500/-
+            </p>
+          </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <input
               required

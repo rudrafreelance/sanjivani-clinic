@@ -66,7 +66,7 @@ export default function GalleryManager() {
           
           <button 
             disabled={saving} 
-            className="w-full bg-gradient-to-r from-clay to-clay-dark hover:shadow-lg text-white font-semibold py-3 px-4 rounded-lg transition-all disabled:opacity-60 hover:scale-105 transform"
+            className="w-full bg-forest hover:bg-forest-dark hover:shadow-lg text-white font-semibold py-3 px-4 rounded-lg transition-all disabled:opacity-60 hover:scale-105 transform"
           >
             {saving ? '💾 Saving…' : '✅ Add Photo'}
           </button>

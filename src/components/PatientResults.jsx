@@ -43,7 +43,7 @@ export default function PatientResults() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {photos.map((p) => (
               <div
                 key={p.id}
@@ -56,12 +56,6 @@ export default function PatientResults() {
                 />
               </div>
             ))}
-          </div>
-          <div className="text-center text-charcoal/60 text-sm">
-            <p>📸 {photos.length}+ Documented Patient Results</p>
-            <p className="text-charcoal/50 text-xs mt-1">
-              Photos shared with patient consent. Results may vary.
-            </p>
           </div>
         </>
       )}

@@ -59,7 +59,7 @@ export default function Products() {
           {products.map((p) => (
             <div
               key={p.id}
-              className="bg-white rounded-xl2 overflow-hidden border border-cream-dark hover:shadow-lg hover:border-clay/30 transition-all group"
+              className="bg-white rounded-xl2 overflow-hidden border border-cream-dark card-lift hover:border-gold/40 group"
             >
               <div className="aspect-video bg-gradient-to-br from-sage to-cream-dark overflow-hidden relative">
                 {p.image_url && (
@@ -71,7 +71,7 @@ export default function Products() {
                 )}
               </div>
               <div className="p-5">
-                <h3 className="font-display font-bold mb-2 text-charcoal group-hover:text-clay transition-colors">
+                <h3 className="font-display font-bold mb-2 text-forest group-hover:text-leaf transition-colors">
                   {p.name}
                 </h3>
                 <p className="text-sm text-charcoal/70 mb-4 line-clamp-2">{p.description}</p>

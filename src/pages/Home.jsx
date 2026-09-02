@@ -11,22 +11,23 @@ import Testimonials from '../components/Testimonials'
 import Appointment from '../components/Appointment'
 import Contact from '../components/Contact'
 import Footer from '../components/Footer'
+import Reveal from '../components/Reveal'
 
 export default function Home() {
   return (
     <>
       <Navbar />
       <Hero />
-      <About />
-      <Conditions />
-      <WhyHomeopathy />
-      <CTABanner />
-      <Products />
-      <ProductVideos />
-      <PatientResults />
-      <Testimonials />
-      <Appointment />
-      <Contact />
+      <Reveal><About /></Reveal>
+      <Reveal><Conditions /></Reveal>
+      <Reveal><WhyHomeopathy /></Reveal>
+      <Reveal><CTABanner /></Reveal>
+      <Reveal><Products /></Reveal>
+      <Reveal><ProductVideos /></Reveal>
+      <Reveal><PatientResults /></Reveal>
+      <Reveal><Testimonials /></Reveal>
+      <Reveal><Appointment /></Reveal>
+      <Reveal><Contact /></Reveal>
       <Footer />
     </>
   )

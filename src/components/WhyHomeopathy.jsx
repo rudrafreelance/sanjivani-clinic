@@ -16,7 +16,7 @@ const WHY_CLINIC = [
 
 export default function WhyHomeopathy() {
   return (
-    <section id="why-homeopathy" className="bg-gradient-to-b from-sage/30 to-cream py-16 md:py-24">
+    <section id="why-homeopathy" className="bg-gradient-to-b from-sage/50 to-cream py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <p className="section-eyebrow mb-2">The Power of Nature</p>
@@ -31,13 +31,13 @@ export default function WhyHomeopathy() {
           {FEATURES.map((f, idx) => (
             <div
               key={f.title}
-              className="bg-white/70 border border-cream-dark rounded-xl2 p-6 hover:shadow-md hover:border-clay/30 transition-all group"
+              className="bg-white/80 border border-cream-dark rounded-xl2 p-6 card-lift hover:border-gold/40 group"
               style={{ animationDelay: `${idx * 100}ms` }}
             >
               <div className="text-4xl mb-4 group-hover:scale-110 transition-transform group-hover:rotate-12">
                 {f.icon}
               </div>
-              <h3 className="font-display font-bold mb-2 text-charcoal group-hover:text-clay transition-colors">
+              <h3 className="font-display font-bold mb-2 text-forest group-hover:text-leaf transition-colors">
                 {f.title}
               </h3>
               <p className="text-charcoal/70 text-sm leading-relaxed">
@@ -57,15 +57,15 @@ export default function WhyHomeopathy() {
           {WHY_CLINIC.map((c) => (
             <div
               key={c.num}
-              className="card flex gap-5 items-start hover:shadow-lg hover:border-clay/30 transition-all group"
+              className="card flex gap-5 items-start card-lift hover:border-gold/40 group"
             >
               <div className="flex-shrink-0">
-                <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-clay to-clay-dark text-white font-display font-extrabold text-xl group-hover:scale-110 transition-transform">
+                <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-forest text-gold font-display font-extrabold text-xl group-hover:scale-110 transition-transform">
                   {c.num}
                 </span>
               </div>
               <div>
-                <h3 className="font-display font-bold mb-1 text-charcoal group-hover:text-clay transition-colors">
+                <h3 className="font-display font-bold mb-1 text-forest group-hover:text-leaf transition-colors">
                   {c.title}
                 </h3>
                 <p className="text-sm text-charcoal/70 leading-relaxed">

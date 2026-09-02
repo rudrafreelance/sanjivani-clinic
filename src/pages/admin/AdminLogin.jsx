@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import Logo from '../../components/Logo'
 
 export default function AdminLogin() {
   const { signIn } = useAuth()
@@ -24,14 +25,14 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cream via-sage/20 to-cream px-6 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-cream to-sage px-6 py-12">
       <div className="w-full max-w-md">
-        {/* Logo & Branding */}
         <div className="text-center mb-12">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-clay to-clay-dark flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <span className="text-white font-display font-bold text-2xl">Dr</span>
+          <div className="flex justify-center mb-6">
+            <Logo size={88} />
           </div>
-          <h1 className="text-3xl font-display font-bold text-charcoal mb-2">Sanjivani Clinic</h1>
+          <h1 className="text-3xl font-display font-bold text-forest mb-1 tracking-wide">SANJIVANI</h1>
+          <p className="text-[11px] text-gold tracking-[0.35em] font-semibold mb-3">CLINIC</p>
           <p className="text-sm text-charcoal/60 font-medium">Admin Dashboard</p>
         </div>
 
@@ -68,7 +69,7 @@ export default function AdminLogin() {
             </div>
           )}
 
-          <button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-clay to-clay-dark hover:shadow-lg text-white font-semibold py-3 px-6 rounded-xl transition-all disabled:opacity-60 hover:scale-105 transform">
+          <button type="submit" disabled={loading} className="w-full bg-forest hover:bg-forest-dark hover:shadow-lg text-white font-semibold py-3 px-6 rounded-xl transition-all disabled:opacity-60 hover:scale-105 transform">
             {loading ? '⏳ Signing in…' : '🔐 Sign In'}
           </button>
 

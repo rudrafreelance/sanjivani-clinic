@@ -2,26 +2,26 @@ const CLINIC_PHONE = import.meta.env.VITE_CLINIC_PHONE || '+917990131841'
 
 export default function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden bg-gradient-to-b from-cream via-white to-sage/20">
-      <div className="max-w-7xl mx-auto px-6 py-12 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+    <section id="top" className="relative overflow-hidden bg-gradient-to-b from-white via-cream to-sage/40">
+      <div className="max-w-7xl mx-auto px-6 py-12 md:py-20 grid md:grid-cols-2 gap-12 items-center">
         <div className="animate-fadeIn">
-          <div className="inline-flex items-center gap-2 bg-white/80 border border-cream-dark rounded-full px-4 py-2 text-sm font-medium mb-6 hover:shadow-md transition-shadow">
-            <span className="text-clay text-lg">★</span>
-            <span className="font-semibold">5.0 Rating</span>
-            <span className="text-charcoal/30">•</span>
+          <div className="inline-flex items-center gap-2 bg-white border border-gold/30 rounded-full px-4 py-2 text-sm font-medium mb-6 hover:shadow-md transition-shadow">
+            <span className="text-gold text-lg">★</span>
+            <span className="font-semibold text-forest">5.0 Rating</span>
+            <span className="text-gold/50">•</span>
             <span className="text-charcoal/60">6 Reviews</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-charcoal">
-            Healing with
+          <p className="section-eyebrow mb-3">Godhra · Homeopath & Nutritionist</p>
+          <h1 className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold leading-tight mb-4 text-forest">
+            Healing Naturally,
             <br />
-            <span className="bg-gradient-to-r from-clay to-clay-dark bg-clip-text text-transparent">
-              Nature&apos;s Wisdom
-            </span>
+            <span className="text-gold-dark">Caring Personally</span>
           </h1>
 
           <p className="text-lg text-charcoal/70 mb-8 max-w-lg leading-relaxed">
-            Classical homeopathy for chronic conditions and lasting wellness. Trust in nature's proven power to heal.
+            Classical homeopathy and nutrition for chronic conditions and lasting wellness —
+            gentle, natural care guided by Dr. Jignesh B. Singada.
           </p>
 
           <div className="flex flex-wrap gap-4 mb-10">
@@ -29,47 +29,45 @@ export default function Hero() {
               href={`tel:${CLINIC_PHONE}`}
               className="btn-primary text-base hover:scale-105 transition-transform"
             >
-              📞 {CLINIC_PHONE.replace('+91', '0')}
+              {CLINIC_PHONE.replace('+91', '0')}
             </a>
             <a
-              href="#contact"
+              href="#appointment"
               className="btn-secondary text-base hover:scale-105 transition-transform"
             >
-              📍 Visit Us
+              Book an Appointment
             </a>
           </div>
 
-          <div className="flex flex-wrap gap-6 text-charcoal/60">
+          <div className="flex flex-wrap gap-6 text-charcoal/60 text-sm">
             <div className="flex items-center gap-2">
-              <span className="text-lg">🕐</span>
-              <span>Open Daily • Closes 7:30 PM</span>
+              <span className="text-leaf">●</span>
+              <span>Open Daily · Closes 7:30 PM</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-lg">📍</span>
+              <span className="text-leaf">●</span>
               <span>Godhra, Gujarat</span>
             </div>
           </div>
         </div>
 
-        <div className="card max-w-md md:ml-auto hover:shadow-lg hover:border-clay/30 transition-all group">
-          <div className="flex items-center gap-4 mb-5 pb-5 border-b border-cream-dark">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-clay to-clay-dark flex items-center justify-center text-white font-display font-bold text-2xl group-hover:scale-110 transition-transform">
-              Dr
+        <div className="flex flex-col items-center md:items-end gap-6">
+          <img
+            src="/hero-homeopathy.jpg"
+            alt="Natural homeopathic remedies with fresh medicinal herbs"
+            className="w-full max-w-md aspect-square object-cover rounded-xl2 shadow-[0_12px_40px_rgba(28,74,54,0.18)] ring-1 ring-gold/30 animate-fadeInScale"
+          />
+
+          <div className="card w-full max-w-md card-lift hover:border-gold/40">
+            <div className="mb-4 pb-4 border-b border-gold/20">
+              <p className="font-display font-bold text-lg text-forest">Dr. Jignesh B. Singada</p>
+              <p className="text-xs tracking-wide text-gold-dark font-semibold">PGDEMS, CCH, CGO, CSVD</p>
+              <p className="text-sm text-charcoal/60">Homeopath & Nutritionist</p>
             </div>
-            <div>
-              <p className="font-display font-bold text-lg text-charcoal">Dr. Jignesh Singada</p>
-              <p className="text-sm text-charcoal/60">Homeopathic Physician</p>
-              <p className="text-sm text-clay-dark font-medium">Classical Homeopathy Specialist</p>
-            </div>
-          </div>
-          <p className="text-charcoal/70 mb-5 leading-relaxed">
-            Known for attentive, patient-centric care. Patients trust Dr. Singada for
-            serious chronic conditions including piles, skin disorders, and systemic
-            complaints.
-          </p>
-          <div className="flex items-center gap-1.5 text-clay">
-            <span className="text-xl">★★★★★</span>
-            <span className="text-charcoal/50 text-sm ml-1 font-medium">(6 reviews)</span>
+            <p className="text-charcoal/70 leading-relaxed text-sm">
+              Known for attentive, patient-centric care across homeopathy, kidney stone
+              treatment, women&apos;s health, digestive care, skin &amp; hair, and nutrition.
+            </p>
           </div>
         </div>
       </div>

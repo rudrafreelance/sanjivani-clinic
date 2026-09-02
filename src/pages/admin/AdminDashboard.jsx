@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
+import Logo from '../../components/Logo'
 import TestimonialsManager from './managers/TestimonialsManager'
 import ProductsManager from './managers/ProductsManager'
 import VideosManager from './managers/VideosManager'
@@ -23,15 +24,13 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-cream via-white to-sage/10">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-gradient-to-r from-charcoal to-charcoal/90 border-b border-clay/20 shadow-lg">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+      <header className="sticky top-0 z-40 bg-forest border-b border-gold/25 shadow-lg">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-clay to-clay-dark flex items-center justify-center shadow-lg">
-              <span className="text-white font-display font-bold text-lg">Dr</span>
-            </div>
+            <Logo size={48} />
             <div>
-              <h1 className="font-display font-bold text-xl text-cream">Sanjivani Clinic</h1>
-              <p className="text-xs text-cream/60">Admin Dashboard</p>
+              <h1 className="font-display font-bold text-xl text-cream tracking-wide">SANJIVANI CLINIC</h1>
+              <p className="text-xs text-gold/80">Admin Dashboard</p>
             </div>
           </div>
           <button 
@@ -52,8 +51,8 @@ export default function AdminDashboard() {
               onClick={() => setActiveTab(t.key)}
               className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all hover:scale-105 transform ${
                 activeTab === t.key 
-                  ? 'bg-gradient-to-r from-clay to-clay-dark text-white shadow-lg' 
-                  : 'bg-white text-charcoal/70 border border-cream-dark hover:border-clay hover:bg-cream/50'
+                  ? 'bg-forest text-white shadow-lg' 
+                  : 'bg-white text-charcoal/70 border border-cream-dark hover:border-gold hover:bg-cream/50'
               }`}
               style={{ transitionDelay: `${idx * 50}ms` }}
             >

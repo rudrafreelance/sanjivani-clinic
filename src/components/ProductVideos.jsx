@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { SAMPLE_VIDEOS } from '../data/demoContent'
 
 export default function ProductVideos() {
-  const [videos, setVideos] = useState([])
+  const [videos, setVideos] = useState(SAMPLE_VIDEOS)
   const [activeVideo, setActiveVideo] = useState(null)
 
   useEffect(() => {
@@ -14,7 +15,7 @@ export default function ProductVideos() {
       .then(({ data, error }) => {
         if (!active) return
         if (error) console.error(error)
-        setVideos(data || [])
+        setVideos(data?.length ? data : SAMPLE_VIDEOS)
       })
     return () => {
       active = false
@@ -55,7 +56,7 @@ export default function ProductVideos() {
           <button
             key={v.id}
             onClick={() => setActiveVideo(v)}
-            className="text-left bg-white rounded-xl2 overflow-hidden border border-cream-dark hover:shadow-lg hover:border-clay/30 transition-all group cursor-pointer"
+            className="text-left bg-white rounded-xl2 overflow-hidden border border-cream-dark card-lift hover:border-gold/40 group cursor-pointer"
           >
             <div className="aspect-video bg-gradient-to-br from-charcoal/80 to-charcoal/60 relative overflow-hidden">
               {v.thumbnail_url && (
@@ -66,13 +67,13 @@ export default function ProductVideos() {
                 />
               )}
               <div className="absolute inset-0 flex items-center justify-center bg-charcoal/20 group-hover:bg-charcoal/40 transition-colors">
-                <span className="w-16 h-16 rounded-full bg-clay hover:bg-clay-dark flex items-center justify-center text-white text-2xl transition-colors transform group-hover:scale-110 transition-transform">
+                <span className="w-16 h-16 rounded-full bg-forest hover:bg-forest-dark flex items-center justify-center text-gold text-2xl transition-colors transform group-hover:scale-110 transition-transform">
                   ▶
                 </span>
               </div>
             </div>
             <div className="p-5">
-              <p className="font-semibold text-charcoal group-hover:text-clay transition-colors">
+              <p className="font-semibold text-forest group-hover:text-leaf transition-colors">
                 {v.title}
               </p>
             </div>
@@ -90,7 +91,7 @@ export default function ProductVideos() {
               <video src={activeVideo.video_url} controls autoPlay className="w-full rounded-xl2" />
               <button
                 onClick={() => setActiveVideo(null)}
-                className="absolute top-4 right-4 bg-clay hover:bg-clay-dark text-white rounded-full w-10 h-10 flex items-center justify-center text-2xl transition-colors"
+                className="absolute top-4 right-4 bg-forest hover:bg-forest-dark text-white rounded-full w-10 h-10 flex items-center justify-center text-2xl transition-colors"
               >
                 ✕
               </button>

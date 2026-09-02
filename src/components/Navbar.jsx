@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Logo from './Logo'
 
 const NAV_LINKS = [
   { label: 'About', href: '#about' },
@@ -13,19 +14,64 @@ const CLINIC_PHONE = import.meta.env.VITE_CLINIC_PHONE || '+917990131841'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('')
+
+  useEffect(() => {
+    const ids = NAV_LINKS.map((link) => link.href.slice(1))
+
+    const updateActive = () => {
+      const offset = 120
+      let current = ''
+
+      for (const id of ids) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        if (el.getBoundingClientRect().top - offset <= 0) {
+          current = `#${id}`
+        }
+      }
+
+      if (window.scrollY < 80) current = ''
+      setActive(current)
+    }
+
+    updateActive()
+    window.addEventListener('scroll', updateActive, { passive: true })
+    window.addEventListener('hashchange', updateActive)
+    return () => {
+      window.removeEventListener('scroll', updateActive)
+      window.removeEventListener('hashchange', updateActive)
+    }
+  }, [])
+
+  const linkClass = (href, mobile = false) => {
+    const isActive = active === href
+    if (mobile) {
+      return `text-sm py-2 px-3 rounded-lg transition-all ${
+        isActive
+          ? 'bg-leaf-light text-forest font-semibold'
+          : 'font-medium text-charcoal/80 hover:bg-leaf-light hover:text-forest'
+      }`
+    }
+    return `text-sm relative group pb-1 transition-all ${
+      isActive
+        ? 'text-forest font-semibold'
+        : 'font-medium text-charcoal/80 hover:text-forest'
+    }`
+  }
 
   return (
-    <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur-md border-b border-cream-dark/50 shadow-sm">
-      <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gold/20 shadow-sm animate-navDrop">
+      <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
         <a href="#top" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-clay to-clay-dark flex items-center justify-center overflow-hidden text-white font-display font-bold text-lg hover:shadow-lg transition-shadow">
-            Dr
-          </div>
+          <Logo size={52} />
           <div>
-            <p className="font-display font-bold text-lg leading-tight text-charcoal">
-              Sanjivani
+            <p className="font-display font-bold text-lg leading-tight text-forest tracking-wide">
+              SANJIVANI
             </p>
-            <p className="text-xs text-charcoal/60 -mt-0.5">Classical Homeopathy</p>
+            <p className="text-[10px] text-gold tracking-[0.35em] font-semibold -mt-0.5">
+              CLINIC
+            </p>
           </div>
         </a>
 
@@ -34,20 +80,25 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-charcoal/80 hover:text-clay-dark hover:font-semibold transition-all relative group"
+              aria-current={active === link.href ? 'true' : undefined}
+              className={linkClass(link.href)}
             >
               {link.label}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-clay group-hover:w-full transition-all duration-300" />
+              <span
+                className={`absolute bottom-0 left-0 h-0.5 bg-gold transition-all duration-300 ${
+                  active === link.href ? 'w-full' : 'w-0 group-hover:w-full'
+                }`}
+              />
             </a>
           ))}
         </div>
 
         <a href={`tel:${CLINIC_PHONE}`} className="hidden sm:inline-flex btn-primary text-sm hover:shadow-lg">
-          📞 Call Now
+          Call Now
         </a>
 
         <button
-          className="lg:hidden p-2 hover:bg-clay/10 rounded-lg transition-colors"
+          className="lg:hidden p-2 hover:bg-leaf-light rounded-lg transition-colors text-forest"
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
         >
@@ -56,31 +107,24 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="lg:hidden px-6 pb-4 flex flex-col gap-3 bg-cream border-t border-cream-dark/30 animate-fadeIn">
+        <div className="lg:hidden px-6 pb-4 flex flex-col gap-3 bg-white border-t border-gold/20 animate-fadeIn">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
+              aria-current={active === link.href ? 'true' : undefined}
               onClick={() => setOpen(false)}
-              className="text-sm font-medium text-charcoal/80 py-2 px-3 rounded-lg hover:bg-clay/10 hover:text-clay-dark transition-all"
+              className={linkClass(link.href, true)}
             >
               {link.label}
             </a>
           ))}
           <a href={`tel:${CLINIC_PHONE}`} className="btn-primary text-sm w-fit mt-2">
-            📞 Call Now
+            Call Now
           </a>
         </div>
       )}
     </header>
-  )
-}
-
-function PhoneIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-    </svg>
   )
 }
 

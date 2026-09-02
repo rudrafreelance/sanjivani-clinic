@@ -11,31 +11,51 @@ body {
 }
 
 h1, h2, h3, h4 {
-  @apply font-display;
+  @apply font-display text-forest;
 }
 
 .section-eyebrow {
-  @apply text-clay-dark font-semibold tracking-wide text-sm uppercase;
+  @apply text-gold-dark font-semibold tracking-[0.22em] text-xs uppercase;
 }
 
 .section-heading {
-  @apply text-3xl md:text-4xl font-bold text-charcoal;
+  @apply text-3xl md:text-4xl font-bold text-forest;
 }
 
 .section-underline {
-  @apply w-16 h-1 bg-clay rounded-full mt-3 mb-6;
+  @apply w-16 h-[2px] bg-gold rounded-full mt-3 mb-6;
 }
 
 .btn-primary {
-  @apply inline-flex items-center gap-2 bg-clay hover:bg-clay-dark text-white font-semibold px-6 py-3 rounded-full transition-colors shadow-md hover:shadow-lg;
+  @apply inline-flex items-center gap-2 bg-forest hover:bg-forest-dark text-white font-semibold px-6 py-3 rounded-full shadow-md hover:shadow-lg;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  @apply inline-flex items-center gap-2 bg-sage hover:bg-cream-dark text-charcoal font-semibold px-6 py-3 rounded-full transition-colors shadow-sm hover:shadow-md;
+  @apply inline-flex items-center gap-2 bg-white hover:bg-leaf-light text-forest font-semibold px-6 py-3 rounded-full border border-gold/50 shadow-sm hover:shadow-md;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
 }
 
 .card {
-  @apply bg-white/70 border border-cream-dark rounded-xl2 p-6 shadow-sm;
+  @apply bg-white/80 border border-cream-dark rounded-xl2 p-6 shadow-sm;
+}
+
+.gold-rule {
+  @apply flex items-center gap-3 text-gold;
+}
+
+.gold-rule::before,
+.gold-rule::after {
+  content: '';
+  @apply h-px flex-1 bg-gold/70;
 }
 
 /* Animations */
@@ -50,8 +70,58 @@ h1, h2, h3, h4 {
   }
 }
 
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes navDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-fadeIn {
-  animation: fadeIn 0.6s ease-out;
+  animation: fadeIn 0.7s ease-out both;
+}
+
+.animate-fadeInScale {
+  animation: fadeInScale 0.9s ease-out both;
+}
+
+.animate-navDrop {
+  animation: navDrop 0.5s ease-out both;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-lift {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(28, 74, 54, 0.12);
 }
 
 /* Smooth transitions */
@@ -66,7 +136,7 @@ h1, h2, h3, h4 {
   }
   
   .section-eyebrow {
-    @apply text-xs;
+    @apply text-[0.65rem];
   }
 }
 
@@ -75,5 +145,10 @@ h1, h2, h3, h4 {
   * {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 }

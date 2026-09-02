@@ -24,7 +24,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-gradient-to-b from-sage/30 to-cream py-16 md:py-24">
+    <section id="contact" className="bg-gradient-to-b from-sage/50 to-cream py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12">
         <div>
           <p className="section-eyebrow mb-2">Get in Touch</p>
@@ -36,7 +36,7 @@ export default function Contact() {
               <span className="text-3xl">📞</span>
               <div>
                 <p className="text-sm text-charcoal/60 font-medium">Call Us</p>
-                <a href={`tel:${CLINIC_PHONE}`} className="text-lg font-semibold text-clay hover:text-clay-dark transition-colors">
+                <a href={`tel:${CLINIC_PHONE}`} className="text-lg font-semibold text-forest hover:text-leaf transition-colors">
                   {CLINIC_PHONE.replace('+91', '0')}
                 </a>
               </div>
@@ -52,7 +52,7 @@ export default function Contact() {
                   href="https://maps.app.goo.gl/2TyUnzLqo5wrRG1o8?g_st=ac" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-clay hover:text-clay-dark font-medium transition-colors inline-block mt-2"
+                  className="text-sm text-gold-dark hover:text-forest font-medium transition-colors inline-block mt-2"
                 >
                   🗺️ Get Directions
                 </a>
@@ -67,21 +67,21 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="mt-8 rounded-xl2 overflow-hidden border border-cream-dark aspect-video bg-gradient-to-br from-sage to-cream-dark shadow-md hover:shadow-lg transition-shadow">
+          <div className="mt-8 rounded-xl2 overflow-hidden border border-gold/30 aspect-video bg-sage shadow-md">
             <iframe
-              title="Sanjivani Clinic Location Map"
+              title="Sanjivani Clinic, Godhra"
               width="100%"
               height="100%"
               style={{ border: 0 }}
               loading="lazy"
               allowFullScreen=""
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3668.8347365843844!2d75.70985142346927!3d22.189340299999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39634343a4a4a4a5%3A0x1234567890abcdef!2sKanelav%2C%20Bamroli%20Rd%2C%20VAVDI%2C%20Godhra%2C%20Gujarat%20389001!5e0!3m2!1sen!2sin!4v1630703800000"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1478!2d73.6143!3d22.7788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39609b910b4bb229%3A0xcc5e21a1f9b05b07!2sSanjivani%20Clinic%2C%20Kanelav%2C%20Bamroli%20Rd%2C%20VAVDI%2C%20Godhra!5e0!3m2!1sen!2sin!4v1725340800000"
             />
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="card space-y-4 self-start hover:shadow-lg transition-shadow">
+        <form onSubmit={handleSubmit} className="card space-y-4 self-start card-lift">
           <h3 className="font-display font-bold text-charcoal mb-4">Send us a Message</h3>
           <input
             required
