@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { notifyAdminWhatsApp } from '../lib/notifyAdmin'
 
 const CLINIC_PHONE = import.meta.env.VITE_CLINIC_PHONE || '+917990131841'
 const initialForm = { name: '', email: '', message: '' }
@@ -20,6 +21,7 @@ export default function Contact() {
       return
     }
     setStatus('success')
+    notifyAdminWhatsApp('contact', form)
     setForm(initialForm)
   }
 
@@ -62,7 +64,7 @@ export default function Contact() {
               <span className="text-3xl">🕐</span>
               <div>
                 <p className="text-sm text-charcoal/60 font-medium">Hours</p>
-                <p className="font-semibold text-charcoal">Open Daily • Closes 7:30 PM</p>
+                <p className="font-semibold text-charcoal">Open Daily • 10:00 AM to 7:30 PM</p>
               </div>
             </div>
           </div>

@@ -1,27 +1,66 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { notifyAdminWhatsApp } from '../lib/notifyAdmin'
+import { TIME_SLOTS, normalizeSlot, todayISODate } from '../lib/timeSlots'
 
-const initialForm = { name: '', phone: '', condition: '', preferred_date: '', message: '' }
+const initialForm = { name: '', phone: '', condition: '', preferred_date: '', preferred_time: '', message: '' }
 
 export default function Appointment() {
-  const [form, setForm] = useState(initialForm)
-  const [status, setStatus] = useState('idle') // idle | saving | success | error
+  const [form, setForm] = useState({ ...initialForm, preferred_date: todayISODate() })
+  const [status, setStatus] = useState('idle') // idle | saving | success | error | slot_taken
+  const [bookedTimes, setBookedTimes] = useState([])
 
   const handleChange = (e) => {
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
+    const { name, value } = e.target
+    setForm((f) => ({
+      ...f,
+      [name]: value,
+      ...(name === 'preferred_date' ? { preferred_time: '' } : {}),
+    }))
   }
+
+  useEffect(() => {
+    if (!form.preferred_date) {
+      setBookedTimes([])
+      return
+    }
+    let cancelled = false
+    ;(async () => {
+      const { data, error } = await supabase.rpc('get_booked_times', { p_date: form.preferred_date })
+      if (cancelled) return
+      if (error) {
+        console.error(error)
+        setBookedTimes([])
+        return
+      }
+      setBookedTimes((data || []).map(normalizeSlot))
+    })()
+    return () => { cancelled = true }
+  }, [form.preferred_date])
+
+  const isBooked = (slot) => bookedTimes.includes(slot)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setStatus('saving')
-    const { error } = await supabase.from('appointments').insert([form])
-    if (error) {
-      console.error(error)
+    if (!form.preferred_date || !form.preferred_time) {
       setStatus('error')
       return
     }
+    if (isBooked(form.preferred_time)) {
+      setStatus('slot_taken')
+      return
+    }
+    setStatus('saving')
+    const { error } = await supabase.from('appointments').insert([{ ...form, status: 'pending' }])
+    if (error) {
+      console.error(error)
+      setStatus(error.code === '23505' ? 'slot_taken' : 'error')
+      return
+    }
     setStatus('success')
-    setForm(initialForm)
+    notifyAdminWhatsApp('appointment', form)
+    setForm({ ...initialForm, preferred_date: todayISODate() })
+    setBookedTimes((t) => [...t, form.preferred_time])
   }
 
   return (
@@ -98,10 +137,12 @@ export default function Appointment() {
           />
 
           <input
+            required
             name="preferred_date"
             value={form.preferred_date}
             onChange={handleChange}
             type="date"
+            min={todayISODate()}
             className="w-full px-4 py-3 rounded-xl border border-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-clay transition-all"
           />
 
@@ -114,13 +155,48 @@ export default function Appointment() {
             className="w-full px-4 py-3 rounded-xl border border-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-clay transition-all"
           />
 
+          <div>
+            <p className="text-xs tracking-[0.18em] uppercase text-gold-dark font-semibold mb-3">
+              Pick a Time Slot
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {TIME_SLOTS.map((slot) => {
+                const taken = isBooked(slot)
+                const selected = form.preferred_time === slot
+                return (
+                  <button
+                    key={slot}
+                    type="button"
+                    disabled={taken}
+                    onClick={() => setForm((f) => ({ ...f, preferred_time: slot }))}
+                    className={`py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border ${
+                      taken
+                        ? 'bg-cream text-charcoal/35 border-cream-dark cursor-not-allowed line-through'
+                        : selected
+                          ? 'bg-forest text-white border-forest shadow-md scale-105'
+                          : 'bg-white text-charcoal/70 border-cream-dark hover:border-gold hover:text-forest hover:shadow-sm'
+                    }`}
+                    title={taken ? 'Already booked' : undefined}
+                  >
+                    {taken ? `${slot} · Booked` : slot}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           <button type="submit" disabled={status === 'saving'} className="btn-primary w-full justify-center disabled:opacity-60 hover:scale-105 transition-transform">
-            {status === 'saving' ? '⏳ Sending…' : '📅 Request Appointment'}
+            {status === 'saving' ? 'Sending…' : 'Request Appointment'}
           </button>
 
           {status === 'success' && (
             <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-green-700 text-sm">
               ✓ Thanks! We&apos;ll call you shortly to confirm.
+            </div>
+          )}
+          {status === 'slot_taken' && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-amber-800 text-sm">
+              That slot was just taken — please pick another time.
             </div>
           )}
           {status === 'error' && (

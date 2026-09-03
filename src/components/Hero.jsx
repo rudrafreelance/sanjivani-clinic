@@ -42,7 +42,7 @@ export default function Hero() {
           <div className="flex flex-wrap gap-6 text-charcoal/60 text-sm">
             <div className="flex items-center gap-2">
               <span className="text-leaf">●</span>
-              <span>Open Daily · Closes 7:30 PM</span>
+              <span>Open Daily · 10:00 AM to 7:30 PM</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-leaf">●</span>

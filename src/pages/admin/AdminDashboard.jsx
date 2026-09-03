@@ -6,8 +6,10 @@ import ProductsManager from './managers/ProductsManager'
 import VideosManager from './managers/VideosManager'
 import GalleryManager from './managers/GalleryManager'
 import SubmissionsManager from './managers/SubmissionsManager'
+import AppointmentsManager from './managers/AppointmentsManager'
 
 const TABS = [
+  { key: 'slots', label: 'Slots', Component: AppointmentsManager },
   { key: 'submissions', label: 'Inquiries', Component: SubmissionsManager },
   { key: 'testimonials', label: 'Testimonials', Component: TestimonialsManager },
   { key: 'products', label: 'Products', Component: ProductsManager },
@@ -17,7 +19,7 @@ const TABS = [
 
 export default function AdminDashboard() {
   const { signOut } = useAuth()
-  const [activeTab, setActiveTab] = useState('submissions')
+  const [activeTab, setActiveTab] = useState('slots')
 
   const Active = TABS.find((t) => t.key === activeTab)?.Component
 

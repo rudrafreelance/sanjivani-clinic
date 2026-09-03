@@ -42,16 +42,53 @@ create table if not exists patient_gallery (
   created_at timestamptz default now()
 );
 
--- 5. APPOINTMENT REQUESTS ----------------------------------------------------
+-- 5. APPOINTMENTS / SLOT BOOKINGS --------------------------------------------
+-- status: pending (website request) | booked (confirmed / admin-created) | cancelled
 create table if not exists appointments (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   phone text not null,
   condition text,
   preferred_date date,
+  preferred_time text,
   message text,
+  status text not null default 'pending'
+    check (status in ('pending', 'booked', 'cancelled')),
   created_at timestamptz default now()
 );
+
+-- Existing projects: run these alters once in the SQL editor
+alter table appointments add column if not exists preferred_date date;
+alter table appointments add column if not exists preferred_time text;
+alter table appointments add column if not exists condition text;
+alter table appointments add column if not exists message text;
+alter table appointments add column if not exists status text;
+update appointments set status = 'pending' where status is null;
+alter table appointments alter column status set default 'pending';
+alter table appointments alter column status set not null;
+
+-- One active booking per date + time slot
+create unique index if not exists appointments_active_slot_uidx
+  on appointments (preferred_date, preferred_time)
+  where status in ('pending', 'booked')
+    and preferred_date is not null
+    and preferred_time is not null;
+
+-- Public can check which times are taken for a date (no patient PII returned)
+create or replace function public.get_booked_times(p_date date)
+returns setof text
+language sql
+security definer
+set search_path = public
+as $$
+  select preferred_time
+  from appointments
+  where preferred_date = p_date
+    and preferred_time is not null
+    and status in ('pending', 'booked');
+$$;
+
+grant execute on function public.get_booked_times(date) to anon, authenticated;
 
 -- 6. CONTACT MESSAGES ---------------------------------------------------------
 create table if not exists contact_messages (
@@ -77,7 +114,9 @@ create policy "Public can read product_videos" on product_videos for select usin
 create policy "Public can read patient_gallery" on patient_gallery for select using (true);
 
 -- Public (anon) can INSERT into form tables only (no read/update/delete)
-create policy "Public can submit appointments" on appointments for insert with check (true);
+-- Website requests must stay as pending; only admin can create booked rows
+create policy "Public can submit appointments" on appointments for insert
+  with check (status = 'pending');
 create policy "Public can submit contact_messages" on contact_messages for insert with check (true);
 
 -- Authenticated admin (logged in via Supabase Auth) can do everything

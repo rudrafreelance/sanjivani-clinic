@@ -83,20 +83,31 @@ export default function ProductVideos() {
 
       {activeVideo && (
         <div
-          className="fixed inset-0 bg-charcoal/95 z-50 flex items-center justify-center p-6 animate-fadeIn"
+          className="fixed inset-0 bg-charcoal/95 z-50 flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
           onClick={() => setActiveVideo(null)}
         >
-          <div className="max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
-            <div className="relative">
-              <video src={activeVideo.video_url} controls autoPlay className="w-full rounded-xl2" />
-              <button
-                onClick={() => setActiveVideo(null)}
-                className="absolute top-4 right-4 bg-forest hover:bg-forest-dark text-white rounded-full w-10 h-10 flex items-center justify-center text-2xl transition-colors"
-              >
-                ✕
-              </button>
+          <div
+            className="relative w-full max-w-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setActiveVideo(null)}
+              className="absolute -top-2 -right-2 sm:top-0 sm:-right-12 z-10 bg-forest hover:bg-forest-dark text-white rounded-full w-10 h-10 flex items-center justify-center text-xl transition-colors shadow-lg"
+              aria-label="Close video"
+            >
+              ✕
+            </button>
+            <div className="w-full rounded-xl2 overflow-hidden bg-black shadow-2xl flex items-center justify-center" style={{ height: 'min(70vh, 420px)' }}>
+              <video
+                src={activeVideo.video_url}
+                controls
+                autoPlay
+                playsInline
+                className="max-w-full max-h-full w-auto h-auto object-contain"
+              />
             </div>
-            <h3 className="text-white text-center mt-6 font-semibold">{activeVideo.title}</h3>
+            <h3 className="text-white text-center mt-4 font-semibold px-2">{activeVideo.title}</h3>
           </div>
         </div>
       )}
