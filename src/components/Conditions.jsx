@@ -15,10 +15,10 @@ const SPECIALTIES = [
     text: 'Natural support to dissolve stones and protect kidney health.',
     icon: (
       <svg viewBox="0 0 48 48" className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <path d="M16 14c-5 3-7 9-6 16 1 6 5 10 10 10 2 0 4-1 5-3" />
-        <path d="M32 14c5 3 7 9 6 16-1 6-5 10-10 10-2 0-4-1-5-3" />
-        <circle cx="18" cy="26" r="2.2" />
-        <circle cx="30" cy="24" r="1.6" />
+        <path d="M30 9c7 2 11 11 9 20-2 10-10 16-18 14-5-1-8-7-5-13 1-3 4-5 5-8 1-5 3-11 9-13z" />
+        <path d="M27 18c-2 3-4 7-4 12" />
+        <path d="M30 22c-2 3-3 7-3 11" />
+        <circle cx="22" cy="28" r="2.2" fill="currentColor" stroke="none" />
       </svg>
     ),
   },
@@ -39,8 +39,9 @@ const SPECIALTIES = [
     text: 'Root-cause treatment for IBS, acidity, and gut imbalance.',
     icon: (
       <svg viewBox="0 0 48 48" className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <path d="M18 10c0 6 12 6 12 14 0 8-12 8-12 16" />
-        <path d="M20 38c2 2 6 3 10 1" />
+        <path d="M22 8v7" />
+        <path d="M16 16c-7 3-8 12-3 18 4 5 12 7 18 4 6-3 9-10 6-16-2-5-8-8-14-5 1-4 5-7 10-6" />
+        <path d="M37 34c2 3 2 6 0 8" />
       </svg>
     ),
   },
@@ -60,10 +61,11 @@ const SPECIALTIES = [
     text: 'Personalised diet plans for energy, weight, and vitality.',
     icon: (
       <svg viewBox="0 0 48 48" className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <circle cx="24" cy="14" r="4" />
-        <path d="M16 22h16M24 18v10" />
-        <path d="M14 42c2-8 6-12 10-12s8 4 10 12" />
-        <path d="M10 26l6-2M38 26l-6-2" />
+        <path d="M10 22h28c0 10-6 16-14 16s-14-6-14-16z" />
+        <path d="M12 22c1-7 5-12 12-12s11 5 12 12" />
+        <path d="M18 16c0-4 2-7 4-8" />
+        <path d="M26 15c1-3 3-5 6-6" />
+        <path d="M20 26c1 3 3 5 4 5s3-2 4-5" />
       </svg>
     ),
   },

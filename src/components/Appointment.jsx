@@ -40,8 +40,8 @@ export default function Appointment() {
             <p className="text-xs tracking-[0.2em] uppercase text-gold-dark font-semibold mb-1">
               Consultation Charge
             </p>
-            <p className="font-display text-3xl font-bold text-forest leading-tight">
-              ₹500<span className="text-lg font-semibold text-charcoal/50">/-</span>
+            <p className="font-display text-3xl font-normal text-forest leading-tight">
+              <span className="font-bold">₹</span>500<span className="text-lg font-normal text-charcoal/50">/-</span>
             </p>
             <p className="text-sm text-charcoal/60 mt-1">Per consultation</p>
           </div>
