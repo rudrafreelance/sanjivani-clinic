@@ -6,7 +6,6 @@ alter table appointments add column if not exists preferred_date date;
 alter table appointments add column if not exists preferred_time text;
 alter table appointments add column if not exists condition text;
 alter table appointments add column if not exists message text;
-
 -- Booking status: pending | booked | cancelled
 alter table appointments add column if not exists status text;
 update appointments set status = 'pending' where status is null;
