@@ -5,10 +5,18 @@ import { TIME_SLOTS, normalizeSlot, todayISODate } from '../lib/timeSlots'
 
 const initialForm = { name: '', phone: '', condition: '', preferred_date: '', preferred_time: '', message: '' }
 
+async function fetchBookedTimes(date) {
+  const { data, error } = await supabase.rpc('get_booked_times', { p_date: date })
+  if (error) throw error
+  return [...new Set((data || []).map(normalizeSlot).filter(Boolean))]
+}
+
 export default function Appointment() {
   const [form, setForm] = useState({ ...initialForm, preferred_date: todayISODate() })
   const [status, setStatus] = useState('idle') // idle | saving | success | error | slot_taken
   const [bookedTimes, setBookedTimes] = useState([])
+  const [slotsLoading, setSlotsLoading] = useState(false)
+  const [slotsError, setSlotsError] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -17,28 +25,47 @@ export default function Appointment() {
       [name]: value,
       ...(name === 'preferred_date' ? { preferred_time: '' } : {}),
     }))
+    if (name === 'preferred_date') setStatus('idle')
   }
 
   useEffect(() => {
     if (!form.preferred_date) {
       setBookedTimes([])
+      setSlotsError(false)
       return
     }
+
     let cancelled = false
+    setSlotsLoading(true)
+    setSlotsError(false)
+
     ;(async () => {
-      const { data, error } = await supabase.rpc('get_booked_times', { p_date: form.preferred_date })
-      if (cancelled) return
-      if (error) {
-        console.error(error)
-        setBookedTimes([])
-        return
+      try {
+        const times = await fetchBookedTimes(form.preferred_date)
+        if (cancelled) return
+        setBookedTimes(times)
+        setForm((f) => (
+          f.preferred_time && times.includes(f.preferred_time)
+            ? { ...f, preferred_time: '' }
+            : f
+        ))
+      } catch (err) {
+        console.error(err)
+        if (!cancelled) {
+          setBookedTimes([])
+          setSlotsError(true)
+        }
+      } finally {
+        if (!cancelled) setSlotsLoading(false)
       }
-      setBookedTimes((data || []).map(normalizeSlot))
     })()
+
     return () => { cancelled = true }
   }, [form.preferred_date])
 
   const isBooked = (slot) => bookedTimes.includes(slot)
+  const freeSlots = TIME_SLOTS.filter((slot) => !isBooked(slot))
+  const allBooked = !slotsLoading && !slotsError && form.preferred_date && freeSlots.length === 0
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -51,16 +78,22 @@ export default function Appointment() {
       return
     }
     setStatus('saving')
-    const { error } = await supabase.from('appointments').insert([{ ...form, status: 'pending' }])
+    const payload = { ...form, status: 'pending' }
+    const { error } = await supabase.from('appointments').insert([payload])
     if (error) {
       console.error(error)
       setStatus(error.code === '23505' ? 'slot_taken' : 'error')
+      try {
+        const times = await fetchBookedTimes(form.preferred_date)
+        setBookedTimes(times)
+      } catch (_) { /* ignore */ }
       return
     }
+    const bookedSlot = form.preferred_time
     setStatus('success')
     notifyAdminWhatsApp('appointment', form)
-    setForm({ ...initialForm, preferred_date: todayISODate() })
-    setBookedTimes((t) => [...t, form.preferred_time])
+    setBookedTimes((t) => [...new Set([...t, bookedSlot])])
+    setForm({ ...initialForm, preferred_date: form.preferred_date })
   }
 
   return (
@@ -96,7 +129,7 @@ export default function Appointment() {
             </div>
             <div className="flex items-center gap-3 text-charcoal/70">
               <span className="text-leaf">✓</span>
-              <span>Convenient appointment scheduling</span>
+              <span>Booked slots are blocked automatically</span>
             </div>
           </div>
         </div>
@@ -136,15 +169,20 @@ export default function Appointment() {
             className="w-full px-4 py-3 rounded-xl border border-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-clay transition-all"
           />
 
-          <input
-            required
-            name="preferred_date"
-            value={form.preferred_date}
-            onChange={handleChange}
-            type="date"
-            min={todayISODate()}
-            className="w-full px-4 py-3 rounded-xl border border-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-clay transition-all"
-          />
+          <div>
+            <label className="block text-xs tracking-[0.18em] uppercase text-gold-dark font-semibold mb-2">
+              Preferred Date
+            </label>
+            <input
+              required
+              name="preferred_date"
+              value={form.preferred_date}
+              onChange={handleChange}
+              type="date"
+              min={todayISODate()}
+              className="w-full px-4 py-3 rounded-xl border border-cream-dark bg-white focus:outline-none focus:ring-2 focus:ring-clay transition-all"
+            />
+          </div>
 
           <textarea
             name="message"
@@ -156,9 +194,14 @@ export default function Appointment() {
           />
 
           <div>
-            <p className="text-xs tracking-[0.18em] uppercase text-gold-dark font-semibold mb-3">
-              Pick a Time Slot
-            </p>
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <p className="text-xs tracking-[0.18em] uppercase text-gold-dark font-semibold">
+                Pick a Time Slot
+              </p>
+              {slotsLoading && (
+                <span className="text-xs text-charcoal/45">Checking availability…</span>
+              )}
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {TIME_SLOTS.map((slot) => {
                 const taken = isBooked(slot)
@@ -167,25 +210,49 @@ export default function Appointment() {
                   <button
                     key={slot}
                     type="button"
-                    disabled={taken}
-                    onClick={() => setForm((f) => ({ ...f, preferred_time: slot }))}
+                    disabled={taken || slotsLoading || slotsError}
+                    onClick={() => {
+                      setStatus('idle')
+                      setForm((f) => ({ ...f, preferred_time: slot }))
+                    }}
                     className={`py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border ${
                       taken
-                        ? 'bg-cream text-charcoal/35 border-cream-dark cursor-not-allowed line-through'
+                        ? 'bg-red-50 text-red-400/80 border-red-100 cursor-not-allowed'
                         : selected
                           ? 'bg-forest text-white border-forest shadow-md scale-105'
-                          : 'bg-white text-charcoal/70 border-cream-dark hover:border-gold hover:text-forest hover:shadow-sm'
+                          : 'bg-white text-charcoal/70 border-cream-dark hover:border-gold hover:text-forest hover:shadow-sm disabled:opacity-50'
                     }`}
                     title={taken ? 'Already booked' : undefined}
                   >
-                    {taken ? `${slot} · Booked` : slot}
+                    {taken ? (
+                      <span className="flex flex-col items-center leading-tight">
+                        <span className="line-through opacity-70">{slot}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wide mt-0.5">Booked</span>
+                      </span>
+                    ) : (
+                      slot
+                    )}
                   </button>
                 )
               })}
             </div>
+            {allBooked && (
+              <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
+                All slots are booked for this date. Please choose another day.
+              </p>
+            )}
+            {slotsError && (
+              <p className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                Could not load slot availability. Please run the slots migration in Supabase, or call the clinic.
+              </p>
+            )}
           </div>
 
-          <button type="submit" disabled={status === 'saving'} className="btn-primary w-full justify-center disabled:opacity-60 hover:scale-105 transition-transform">
+          <button
+            type="submit"
+            disabled={status === 'saving' || allBooked || slotsLoading || slotsError || !form.preferred_time}
+            className="btn-primary w-full justify-center disabled:opacity-60 hover:scale-105 transition-transform"
+          >
             {status === 'saving' ? 'Sending…' : 'Request Appointment'}
           </button>
 

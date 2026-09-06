@@ -26,6 +26,8 @@ export default function Footer() {
             <div className="space-y-2 text-sm">
               <a href="#about" className="block hover:text-gold transition-colors">About Dr. Singada</a>
               <a href="#conditions" className="block hover:text-gold transition-colors">Conditions Treated</a>
+              <a href="#why-homeopathy" className="block hover:text-gold transition-colors">Why Homeopathy</a>
+              <a href="#products" className="block hover:text-gold transition-colors">Our Products</a>
               <a href="#testimonials" className="block hover:text-gold transition-colors">Patient Reviews</a>
               <a href="#appointment" className="block hover:text-gold transition-colors">Book Appointment</a>
             </div>

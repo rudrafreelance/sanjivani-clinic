@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabase'
-import { SAMPLE_VIDEOS } from '../data/demoContent'
 
 export default function ProductVideos() {
-  const [videos, setVideos] = useState(SAMPLE_VIDEOS)
+  const [videos, setVideos] = useState([])
   const [activeVideo, setActiveVideo] = useState(null)
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function ProductVideos() {
       .then(({ data, error }) => {
         if (!active) return
         if (error) console.error(error)
-        setVideos(data?.length ? data : SAMPLE_VIDEOS)
+        setVideos(data || [])
       })
     return () => {
       active = false
@@ -81,9 +81,9 @@ export default function ProductVideos() {
         ))}
       </div>
 
-      {activeVideo && (
+      {activeVideo && createPortal(
         <div
-          className="fixed inset-0 bg-charcoal/95 z-50 flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
+          className="fixed inset-0 bg-charcoal/95 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
           onClick={() => setActiveVideo(null)}
         >
           <div
@@ -109,7 +109,8 @@ export default function ProductVideos() {
             </div>
             <h3 className="text-white text-center mt-4 font-semibold px-2">{activeVideo.title}</h3>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   )

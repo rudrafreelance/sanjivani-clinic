@@ -5,6 +5,7 @@ const NAV_LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Conditions', href: '#conditions' },
   { label: 'Why Homeopathy', href: '#why-homeopathy' },
+  { label: 'Our Products', href: '#products' },
   { label: 'Testimonials', href: '#testimonials' },
   { label: 'Appointment', href: '#appointment' },
   { label: 'Contact', href: '#contact' },
