@@ -45,7 +45,8 @@ export default function Footer() {
                 Kanelav, Bamroli Rd, opp. PLAZMA SCHOOL, VAVDI<br />
                 Godhra, Gujarat 389001
               </p>
-              <p>Open Daily · 10:00 AM to 7:30 PM</p>
+              <p>Mon–Sat · 10:00 AM to 7:30 PM</p>
+              <p>Sunday holiday</p>
             </div>
           </div>
         </div>

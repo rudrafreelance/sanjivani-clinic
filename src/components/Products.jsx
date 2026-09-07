@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { createPortal } from 'react-dom'
-import { supabase } from '../lib/supabase'
+import { getProductImages, getPrimaryImage } from '../lib/productImages'
+import { fetchProductsWithImages } from '../lib/fetchProducts'
 
 const CLINIC_PHONE = import.meta.env.VITE_CLINIC_PHONE || '+917990131841'
 const WHATSAPP_PHONE = String(CLINIC_PHONE).replace(/\D/g, '')
 const DISPLAY_PHONE = CLINIC_PHONE.replace('+91', '0')
+const PREVIEW_COUNT = 6
 
 function orderWhatsAppUrl(productName) {
   const text = [
@@ -71,10 +74,22 @@ function parseProductCopy(description = '') {
 function ProductDetailModal({ product, onClose }) {
   const title = cleanTitle(product.name)
   const { paragraphs, benefits } = parseProductCopy(product.description)
+  const images = getProductImages(product)
+  const [activeImg, setActiveImg] = useState(0)
+
+  useEffect(() => {
+    setActiveImg(0)
+  }, [product.id])
 
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft' && images.length > 1) {
+        setActiveImg((i) => (i - 1 + images.length) % images.length)
+      }
+      if (e.key === 'ArrowRight' && images.length > 1) {
+        setActiveImg((i) => (i + 1) % images.length)
+      }
     }
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -83,7 +98,7 @@ function ProductDetailModal({ product, onClose }) {
       document.body.style.overflow = prev
       window.removeEventListener('keydown', onKey)
     }
-  }, [onClose])
+  }, [onClose, images.length])
 
   return createPortal(
     <div
@@ -106,15 +121,55 @@ function ProductDetailModal({ product, onClose }) {
           ✕
         </button>
 
-        <div className="shrink-0 h-[28%] md:h-full md:w-[42%] bg-[#f5f2ea] border-b md:border-b-0 md:border-r border-cream-dark flex items-center justify-center p-4 sm:p-6 overflow-hidden">
-          {product.image_url ? (
-            <img
-              src={product.image_url}
-              alt={title}
-              className="max-w-full max-h-full w-auto h-auto object-contain"
-            />
-          ) : (
-            <p className="text-charcoal/40 text-sm">No image</p>
+        <div className="shrink-0 h-[34%] md:h-full md:w-[46%] bg-[#f5f2ea] border-b md:border-b-0 md:border-r border-cream-dark flex flex-col overflow-hidden">
+          <div className="relative flex-1 min-h-0 flex items-center justify-center p-4 sm:p-6">
+            {images[activeImg] ? (
+              <img
+                src={images[activeImg]}
+                alt={`${title} ${activeImg + 1}`}
+                className="max-w-full max-h-full w-auto h-auto object-contain"
+              />
+            ) : (
+              <p className="text-charcoal/40 text-sm">No image</p>
+            )}
+
+            {images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setActiveImg((i) => (i - 1 + images.length) % images.length)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/95 border border-cream-dark text-forest font-bold shadow-sm hover:bg-forest hover:text-white transition-colors"
+                  aria-label="Previous image"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveImg((i) => (i + 1) % images.length)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/95 border border-cream-dark text-forest font-bold shadow-sm hover:bg-forest hover:text-white transition-colors"
+                  aria-label="Next image"
+                >
+                  ›
+                </button>
+              </>
+            )}
+          </div>
+
+          {images.length > 1 && (
+            <div className="shrink-0 flex gap-2 overflow-x-auto px-4 pb-4">
+              {images.map((url, idx) => (
+                <button
+                  key={`${url}-${idx}`}
+                  type="button"
+                  onClick={() => setActiveImg(idx)}
+                  className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 bg-white ${
+                    idx === activeImg ? 'border-forest' : 'border-transparent opacity-70 hover:opacity-100'
+                  }`}
+                >
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
           )}
         </div>
 
@@ -188,23 +243,24 @@ function ProductDetailModal({ product, onClose }) {
   )
 }
 
-export default function Products() {
+/** @param {{ mode?: 'preview' | 'full' }} props */
+export default function Products({ mode = 'preview' }) {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeProduct, setActiveProduct] = useState(null)
 
+  const isPreview = mode === 'preview'
+  const visible = isPreview ? products.slice(0, PREVIEW_COUNT) : products
+  const hasMore = isPreview && products.length > PREVIEW_COUNT
+
   useEffect(() => {
     let active = true
-    supabase
-      .from('products')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data, error }) => {
-        if (!active) return
-        if (error) console.error(error)
-        setProducts(data || [])
-        setLoading(false)
-      })
+    fetchProductsWithImages().then(({ data, error }) => {
+      if (!active) return
+      if (error) console.error(error)
+      setProducts(data || [])
+      setLoading(false)
+    })
     return () => {
       active = false
     }
@@ -213,6 +269,14 @@ export default function Products() {
   return (
     <section id="products" className="bg-gradient-to-b from-white to-cream max-w-7xl mx-auto px-6 py-16 md:py-24">
       <div className="text-center mb-12">
+        {!isPreview && (
+          <Link
+            to="/#products"
+            className="inline-block mb-6 text-sm font-semibold text-forest hover:text-leaf transition-colors"
+          >
+            ← Back to home
+          </Link>
+        )}
         <p className="section-eyebrow">Our Products</p>
         <h2 className="section-heading">Sanjivani Natural Range</h2>
         <div className="section-underline mx-auto" />
@@ -241,40 +305,64 @@ export default function Products() {
       )}
 
       {!loading && products.length > 0 && (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((p) => {
-            const title = cleanTitle(p.name)
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => setActiveProduct(p)}
-                className="text-left bg-white rounded-xl2 overflow-hidden border border-cream-dark card-lift hover:border-gold/40 group"
+        <>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {visible.map((p) => {
+              const title = cleanTitle(p.name)
+              const cover = getPrimaryImage(p)
+              const imageCount = getProductImages(p).length
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setActiveProduct(p)}
+                  className="text-left bg-white rounded-xl2 overflow-hidden border border-cream-dark card-lift hover:border-gold/40 group"
+                >
+                  <div className="aspect-[4/3] bg-[#f5f2ea] overflow-hidden relative flex items-center justify-center p-3">
+                    {cover ? (
+                      <img
+                        src={cover}
+                        alt={title}
+                        className="max-w-full max-h-full object-contain group-hover:scale-[1.02] transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="text-charcoal/30 text-sm">No image</div>
+                    )}
+                    {imageCount > 1 && (
+                      <span className="absolute bottom-2 right-2 text-[11px] font-bold bg-white/95 text-forest px-2 py-0.5 rounded shadow-sm">
+                        {imageCount} photos
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-display font-bold mb-2 text-forest group-hover:text-leaf transition-colors">
+                      {title}
+                    </h3>
+                    <p className="text-sm text-charcoal/70 line-clamp-2">{p.description}</p>
+                    <p className="mt-4 text-sm font-semibold text-gold-dark group-hover:text-forest transition-colors">
+                      View product →
+                    </p>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+
+          {hasMore && (
+            <div className="mt-10 text-center">
+              <Link
+                to="/products"
+                className="inline-flex flex-col items-center gap-1 text-forest font-semibold tracking-wide hover:text-leaf transition-colors group"
               >
-                <div className="aspect-[4/3] bg-[#f5f2ea] overflow-hidden relative flex items-center justify-center p-3">
-                  {p.image_url ? (
-                    <img
-                      src={p.image_url}
-                      alt={title}
-                      className="max-w-full max-h-full object-contain group-hover:scale-[1.02] transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="text-charcoal/30 text-sm">No image</div>
-                  )}
-                </div>
-                <div className="p-5">
-                  <h3 className="font-display font-bold mb-2 text-forest group-hover:text-leaf transition-colors">
-                    {title}
-                  </h3>
-                  <p className="text-sm text-charcoal/70 line-clamp-2">{p.description}</p>
-                  <p className="mt-4 text-sm font-semibold text-gold-dark group-hover:text-forest transition-colors">
-                    View product →
-                  </p>
-                </div>
-              </button>
-            )
-          })}
-        </div>
+                <span className="text-sm sm:text-base">Explore more products</span>
+                <span className="h-px w-full bg-gold group-hover:bg-forest transition-colors" />
+              </Link>
+              <p className="mt-2 text-xs text-charcoal/45">
+                Showing {PREVIEW_COUNT} of {products.length} products
+              </p>
+            </div>
+          )}
+        </>
       )}
 
       {activeProduct && (

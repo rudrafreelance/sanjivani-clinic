@@ -4,9 +4,9 @@ export default function About() {
       <div className="grid md:grid-cols-2 gap-12 items-center">
         <div className="flex justify-center">
           <img
-            src="/about-clinic.jpg"
-            alt="Sanjivani Clinic consultation room with natural herbal remedies"
-            className="w-full max-w-md aspect-square object-cover rounded-xl2 shadow-[0_12px_40px_rgba(28,74,54,0.16)] ring-1 ring-gold/30"
+            src="/dr-jignesh-singada.jpg"
+            alt="Dr. Jignesh B. Singada — Homeopath & Nutritionist, Sanjivani Clinic Godhra"
+            className="w-full max-w-md aspect-[3/4] object-cover object-top rounded-xl2 shadow-[0_12px_40px_rgba(28,74,54,0.16)] ring-1 ring-gold/30"
           />
         </div>
         <div>

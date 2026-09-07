@@ -67,7 +67,12 @@ export default function Testimonials() {
                   )}
                   <div>
                     <p className="font-semibold text-sm">{t.name}</p>
-                    {t.location && <p className="text-cream/50 text-xs">{t.location}</p>}
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                      {t.location && <p className="text-cream/50 text-xs">{t.location}</p>}
+                      {t.posted_ago && (
+                        <p className="text-cream/40 text-xs">{t.posted_ago}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

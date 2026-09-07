@@ -64,7 +64,8 @@ export default function Contact() {
               <span className="text-3xl">🕐</span>
               <div>
                 <p className="text-sm text-charcoal/60 font-medium">Hours</p>
-                <p className="font-semibold text-charcoal">Open Daily • 10:00 AM to 7:30 PM</p>
+                <p className="font-semibold text-charcoal">Mon–Sat • 10:00 AM to 7:30 PM</p>
+                <p className="text-sm text-charcoal/70 mt-1">Sunday holiday</p>
               </div>
             </div>
           </div>

@@ -8,11 +8,16 @@ export default function Hero() {
           <div className="inline-flex items-center gap-2 bg-white border border-gold/30 rounded-full px-4 py-2 text-sm font-medium mb-6 hover:shadow-md transition-shadow">
             <span className="text-gold text-lg">★</span>
             <span className="font-semibold text-forest">5.0 Rating</span>
-            <span className="text-gold/50">•</span>
-            <span className="text-charcoal/60">6 Reviews</span>
           </div>
 
-          <p className="section-eyebrow mb-3">Godhra · Homeopath & Nutritionist</p>
+          <div className="mb-3 space-y-1">
+            <p className="section-eyebrow !normal-case tracking-wide">
+              Homeopathy Doctor in Godhra | Dr. Jignesh B. Singada
+            </p>
+            <p className="text-sm text-charcoal/65 font-medium">
+              Homeopath &amp; Nutritionist
+            </p>
+          </div>
           <h1 className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold leading-tight mb-4 text-forest">
             Healing Naturally,
             <br />
@@ -42,7 +47,7 @@ export default function Hero() {
           <div className="flex flex-wrap gap-6 text-charcoal/60 text-sm">
             <div className="flex items-center gap-2">
               <span className="text-leaf">●</span>
-              <span>Open Daily · 10:00 AM to 7:30 PM</span>
+              <span>Mon–Sat · 10:00 AM–7:30 PM · Sunday holiday</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-leaf">●</span>

@@ -7,6 +7,7 @@ export const SAMPLE_TESTIMONIALS = [
     message:
       'I had been struggling with acidity for years. After a few weeks of treatment with Dr. Singada, the burning and heaviness reduced a lot. Very calm and caring doctor.',
     photo_url: '',
+    posted_ago: '2 months ago',
     sort_order: 1,
   },
   {
@@ -17,6 +18,7 @@ export const SAMPLE_TESTIMONIALS = [
     message:
       'I came for kidney stone pain and was worried about surgery. The homeopathic medicines helped me pass the stone comfortably. Grateful for the personal attention.',
     photo_url: '',
+    posted_ago: '5 months ago',
     sort_order: 2,
   },
   {
@@ -27,6 +29,7 @@ export const SAMPLE_TESTIMONIALS = [
     message:
       'My PCOS symptoms and irregular cycles improved with his treatment and diet advice. He listens properly and explains everything clearly.',
     photo_url: '',
+    posted_ago: '1 month ago',
     sort_order: 3,
   },
   {
